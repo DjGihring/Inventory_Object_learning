@@ -10,7 +10,7 @@ bag.
 #Item Class
 class Item: 
     """Item class, contains information on the object."""
-    def __init__(self, name, symbol, disc, type, value, num): #initializes the Item
+    def __init__(self, name, symbol, disc, type, value, num):
         """
         Constructor for Item Class.
         
@@ -42,11 +42,12 @@ class Inventory:
         self.name = name
         self.size = size
         self.space = 0
-        self.nullItem = Item("null", str(0), "nothing here", "null", -1, -1)
+        self.nullItem = Item("null", str(0), "nothing here", "zzzzzzzz", -1, -1)
         self.inven = [self.nullItem for i in range(self.size*self.size)]  
 
     def check(self): #Displays the inventory
         """Displays the inventory of the bag given in a nxn array."""
+        print(self.name + ":")
         print('[', end = '')
         for i in range(self.size*self.size):
             print(self.inven[i].symbol, end = '')
@@ -66,6 +67,14 @@ class Inventory:
                 print(Item.name + " was Inserted at " + str(i+1) 
                         + 'x' + str(int(i/4)+1))
                 return()
+
+    def remove(self, ItemName):
+        """Takes given Item and returns it as an Item object"""
+        for i in range(len(self.inven)):
+            if ItemName == self.inven[i].name:
+                x = self.inven[i]
+                self.inven[i] = self.nullItem
+                return(x)
 
     def swap(self, p1, p2): #swaps two Items positions
         """Swaps the Items in the two Given positions."""
@@ -127,6 +136,9 @@ def main():
     backPack.check()
     print()
     backPack.arrange(1)
+    backPack.check()
+    x = backPack.remove("bottle")
+    print("Just pulled out the " + x.name)
     backPack.check()
     input("press enter to exit")
     
