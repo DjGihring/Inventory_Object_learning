@@ -1,5 +1,10 @@
-# BackBack test code
-# Author: DJ Gihring
+#!usr/bin/python3
+# -*- coding: utf-8 -*-
+
+"""
+A simple Inventory System, containing a class for items and a class for the
+bag.
+"""
 
 
 #Item Class
@@ -25,59 +30,105 @@ class Item:
         self.num = num
 
 class Inventory:
-    """ Inventory Class for a character, with associated methods"""
+    """ Inventory Class for a character, uses nxn maxtrix as representation"""
     def __init__(self, name, size): #intializes the Inventory
+        """
+        Inventory object constructor
+        
+        Arguments:
+            name (string): name of the Bag
+            size (int): n in the nxn array which is just a list
+        """
         self.name = name
         self.size = size
         self.space = 0
         self.nullItem = Item("null", str(0), "nothing here", "null", -1, -1)
-        self.inven = [[self.nullItem for i in range(self.size)] for j in range(self.size)]  # nxn array
+        self.inven = [self.nullItem for i in range(self.size*self.size)]  
 
     def check(self): #Displays the inventory
-    """Displays the inventory of the bag given"""
-        for j in range(self.size):
-            print('[', end = '')
-            for i in range(self.size):
-                    x = self.inven[i][j]
-                    print(x.symbol,end = ''),
-                    if(i+1 != self.size):
-                        print(", ", end = '')
-            print(']')
+        """Displays the inventory of the bag given in a nxn array."""
+        print('[', end = '')
+        for i in range(self.size*self.size):
+            print(self.inven[i].symbol, end = '')
+            if((i+1)%self.size == 0):
+                print(']')
+                if (i+1) != (self.size*self.size):
+                    print('[',end = '')
+            else:
+                print(' ,',end='')
+            
 
     def insert(self, Item): #Inserts Item closest to the front
-    """Given Item is inserted into the Bag"""
-    for j in range(self.size):
-        for i in range(self.size):
-            if(self.inven[i][j] == self.nullItem):
-                self.inven[i][j] = Item
-                print(Item.name + " was Inserted at " + str(i+1) + 'x' + str(j+1))
+        """Given Item is inserted into the Bag as closest to 1x1."""
+        for i in range(self.size*self.size):
+            if(self.inven[i] == self.nullItem):
+                self.inven[i] = Item
+                print(Item.name + " was Inserted at " + str(i+1) 
+                        + 'x' + str(int(i/4)+1))
                 return()
 
-    def swap(self, x1, y1, x2, y2): #swaps two Items positions
-    """Swaps the Items in the two Given positions"""
-    item1 = self.inven[x1][y1]
-    item2 = self.inven[x2][y2]
-    self.inven[x1][y1] = item2
-    self.inven[x2][y2] = item1
+    def swap(self, p1, p2): #swaps two Items positions
+        """Swaps the Items in the two Given positions."""
+        item1 = self.inven[p1]
+        item2 = self.inven[p2]
+        self.inven[p1] = item2
+        self.inven[p2] = item1
 
-# def arrange(self, type): # Sort inven with lowest values first
-# if(type == 1): #Alphabetical
+    def arrange(self, type): # Sort inven with lowest values first
+        """
+        Arranges the inventory according to the given instruction.
+        
+        Arguments:
+            type (int): Corresponds the the value you want to compare, such as
+            Alphabetical or value.
+            
+        Both Algorithms use a simple insertion sort to solve out what goes in 
+        the propper place.
+        """
+        if(type == 1): #Alphabetical
+            for i in range(1 , len(self.inven)):
+                key = self.inven[i]
+                j = i - 1
+                while j >= 0 and self.inven[j].name > key.name:
+                    self.inven[j + 1] = self.inven[j]
+                    j -= 1
+                self.inven[j + 1] = key
 	
-# if(type == 2): #Value
+        if(type == 2): #Value
+            for i in range(1 , len(self.inven)):
+                key = self.inven[i]
+                j = i - 1
+                while j >= 0 and self.inven[j].value > key.value:
+                    self.inven[j + 1] = self.inven[j]
+                    j -= 1
+                self.inven[j + 1] = key
 
-
-print("hello")
-Bottle = Item("bottle", "B", "A Water Bottle", "Misc", "5", "1")
-print("This is a " + Bottle.name)
-purse = Inventory("purse", 4)
-print("This is a " + purse.name)
-print("It's Size is " + str(purse.size))
-print("Here is it's contentes")
-purse.check();
-backPack = Inventory("backPack", 6)
-print("This is a " + backPack.name)
-print("It's Size is " + str(backPack.size))
-print("Here is it's contentes")
-backPack.check()
-backPack.insert(Bottle)
-backPack.check()
+#This is just for testing, kind gross I know
+def main():
+    print("Testing Inventory stuff")
+    Bottle = Item("bottle", "B", "A Water Bottle", "Misc", "5", "1")
+    print("This is a " + Bottle.name)
+    purse = Inventory("purse", 4)
+    print("This is a " + purse.name)
+    print("It's Size is " + str(purse.size))
+    print("Here is it's contentes")
+    purse.check();
+    backPack = Inventory("backPack", 6)
+    print("This is a " + backPack.name)
+    print("It's Size is " + str(backPack.size))
+    print("Here is it's contentes")
+    backPack.check()
+    backPack.insert(Bottle)
+    backPack.check()
+    Candy = Item("candy", "C", "A hard candy", "Misc", "7", "2")
+    Apple = Item("apple", "a", "A red apple", "Food", "3", "1")
+    backPack.insert(Candy)
+    backPack.insert(Apple)
+    backPack.check()
+    print()
+    backPack.arrange(1)
+    backPack.check()
+    input("press enter to exit")
+    
+if __name__ == "__main__":
+    main()
