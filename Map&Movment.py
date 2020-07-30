@@ -39,40 +39,68 @@ class Map:
         Creates a empty floor space with a given width and length, and then
         fills in the outside area with a impassable wall
 
-        the boardEmpty is the 'floor' of the room, it should only contain info
+        the boardFloor is the 'floor' of the room, it should only contain info
         about the actual floor.
 
         board holds things like items, characters, etc.
         """
         self.length = length
         self.width = width
-        self.boardEmpty = [[Tile("floor", 0, ".") for x in range(self.width +
+        self.boardFloor = [[Tile("floor", 0, ".") for x in range(self.width +
                             border)] for y in range(self.length+border)]
-        self.board = [[Tile("null", 0, "#") for x in range(self.width +
-                       border)]for y in range(self.length+border)]
+        self.boardChar = [[Tile("null", 0, "#") for x in range(self.width +
+                          border)]for y in range(self.length+border)]
 
         # Sets up walls for the room
         for j in range(self.width+border):
             for i in range(self.length+border):
                 if((i == 0 or i == self.length+1) or
                         (j == 0 or j == self.width+1)):
-                    self.boardEmpty[i][j] = Tile("wall", 1, "#")
+                    self.boardFloor[i][j] = Tile("wall", 1, "#")
 
     def ShowMap(self):
         """Prints out the map for the player to see"""
         for j in range(self.width+border):
             for i in range(self.length+border):
-                print(self.boardEmpty[i][j].symbol, end=" ")
+                if(self.boardChar[i][j].type == "null" or self.boardChar[i][j]
+                        .type == "wall"):
+                    print(self.boardFloor[i][j].symbol, end=" ")
+                else:
+                    print(self.boardChar[i][j].symbol, end=" ")
             print("")
 
 
 class PlayerNavigator:
     def __init__(self, Character, map):
-        self.Player = Character
+        self.type = "Character"
         self.PosX = 1
         self.PosY = 1
         self.symbol = "@"
-        map.boardEmpty[self.PosX][self.PosY] = self
+
+        map.boardChar[self.PosX][self.PosY] = self
+        self.map = map
+
+    def playerMovment(self, direction):
+        if(direction == 2):
+            self.map.boardChar[self.PosX][self.PosY] = Tile("null", 0, "#")
+            self.PosY += 1
+            self.map.boardChar[self.PosX][self.PosY] = self
+
+        if(direction == 4):
+            self.map.boardChar[self.PosX][self.PosY] = Tile("null", 0, "#")
+            self.PosX += 1
+            self.map.boardChar[self.PosX][self.PosY] = self
+
+        if(direction == 6):
+            self.map.boardChar[self.PosX][self.PosY] = Tile("null", 0, "#")
+            self.PosX += 1
+            self.map.boardChar[self.PosX][self.PosY] = self
+
+        if(direction == 8):
+            self.map.boardChar[self.PosX][self.PosY] = Tile("null", 0, "#")
+            self.PosY += 1
+            self.map.boardChar[self.PosX][self.PosY] = self
+        self.map.ShowMap()
 
 
 def main():  # more for testing than anything
@@ -90,6 +118,8 @@ def main():  # more for testing than anything
     James = Ch.Character("James", "Human", "@", 10, 1, 0)
     nav = PlayerNavigator(James, testMap3)
     testMap3.ShowMap()
+    nav.playerMovment(2)
+    nav.playerMovment(6)
 
 
 if __name__ == "__main__":
