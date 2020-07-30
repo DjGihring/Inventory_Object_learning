@@ -7,20 +7,21 @@ bag.
 """
 
 
-#Item Class
-class Item: 
-    """Item class, contains information on the object."""
+
+# Item Class
+class Item:
+    """Item, contains information on the object."""
     def __init__(self, name, symbol, disc, type, value, num):
         """
         Constructor for Item Class.
-        
+
         Arguments:
-            name (string): name of the Item
-            symbol (string): Text Symbol for the Item
-            disc (string): Item description
-            type (string): type of item, food, gem, weapon, etc
-            value (int): Monetary value of the Iten
-            num (int): number of items
+            name(string): name of the Item
+            symbol(string): Text Symbol for the Item
+            disc(string): Item description
+            type(string): type of item, food, gem, weapon, etc
+            value(int): Monetary value of the Iten
+            num(int): number of items
         """
         self.name = name
         self.symbol = symbol
@@ -34,16 +35,17 @@ class Inventory:
     def __init__(self, name, size): #intializes the Inventory
         """
         Inventory object constructor
-        
+
         Arguments:
-            name (string): name of the Bag
-            size (int): n in the nxn array which is just a list
+            name(string): name of the Bag
+            size(int): n in the nxn array which is just a list
         """
         self.name = name
         self.size = size
         self.space = 0
-        self.nullItem = Item("null", str(0), "nothing here", "zzzzzzzz", -1, -1)
-        self.inven = [self.nullItem for i in range(self.size*self.size)]  
+        self.nullItem = Item("null", str(
+            0), "nothing here", "zzzzzzzz", -1, -1)
+        self.inven = [self.nullItem for i in range(self.size*self.size)]
 
     def check(self): #Displays the inventory
         """Displays the inventory of the bag given in a nxn array."""
@@ -57,14 +59,14 @@ class Inventory:
                     print('[',end = '')
             else:
                 print(' ,',end='')
-            
+
 
     def insert(self, Item): #Inserts Item closest to the front
         """Given Item is inserted into the Bag as closest to 1x1."""
         for i in range(self.size*self.size):
             if(self.inven[i] == self.nullItem):
                 self.inven[i] = Item
-                print(Item.name + " was Inserted at " + str(i+1) 
+                print(Item.name + " was Inserted at " + str(i+1)
                         + 'x' + str(int(i/4)+1))
                 return()
 
@@ -86,12 +88,12 @@ class Inventory:
     def arrange(self, type): # Sort inven with lowest values first
         """
         Arranges the inventory according to the given instruction.
-        
+
         Arguments:
-            type (int): Corresponds the the value you want to compare, such as
+            type(int): Corresponds the the value you want to compare, such as
             Alphabetical or value.
-            
-        Both Algorithms use a simple insertion sort to solve out what goes in 
+
+        Both Algorithms use a simple insertion sort to solve out what goes in
         the propper place.
         """
         if(type == 1): #Alphabetical
@@ -102,7 +104,7 @@ class Inventory:
                     self.inven[j + 1] = self.inven[j]
                     j -= 1
                 self.inven[j + 1] = key
-	
+    
         if(type == 2): #Value
             for i in range(1 , len(self.inven)):
                 key = self.inven[i]
@@ -112,7 +114,7 @@ class Inventory:
                     j -= 1
                 self.inven[j + 1] = key
 
-#This is just for testing, kind gross I know
+# This is just for testing, kind gross I know
 def main():
     print("Testing Inventory stuff")
     Bottle = Item("bottle", "B", "A Water Bottle", "Misc", "5", "1")
