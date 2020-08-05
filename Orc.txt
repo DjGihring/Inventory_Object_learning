@@ -1,0 +1,4 @@
+Name:Orc
+Health:20
+Attack:3
+Armour:2

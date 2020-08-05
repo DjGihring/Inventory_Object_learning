@@ -40,14 +40,19 @@ class Map:
         fills in the outside area with a impassable wall
 
         the boardFloor is the 'floor' of the room, it should only contain info
-        about the actual floor.
+        about the actual floor as well as the walls.
+        
+        boardItem holds items, obsticals, etc, anthing that is not alive, and 
+        not a floor
 
-        board holds things like items, characters, etc.
+        boardChar holds characters, etc.
         """
         self.length = length
         self.width = width
         self.boardFloor = [[Tile("floor", 0, ".") for x in range(self.width +
                             border)] for y in range(self.length+border)]
+        self.boardItem = [[Tile("null", 0, "#") for x in range(self.width +
+                          border)]for y in range(self.length+border)]
         self.boardChar = [[Tile("null", 0, "#") for x in range(self.width +
                           border)]for y in range(self.length+border)]
 
@@ -59,14 +64,27 @@ class Map:
                     self.boardFloor[i][j] = Tile("wall", 1, "#")
 
     def ShowMap(self):
-        """Prints out the map for the player to see"""
-        for j in range(self.width+border):
+        """
+        Prints out the map for the player to see
+        
+        This prints out the symbol acording to layer priority in this order,
+        Walls, Chars, Items/Interactables, floor       
+        """
+        for j in reversed(range(self.width+border)):
+        
             for i in range(self.length+border):
-                if(self.boardChar[i][j].type == "null" or self.boardChar[i][j]
-                        .type == "wall"):
+                if((self.boardChar[i][j].type == "null" and
+                        self.boardItem[i][j].type == "null")
+                        or self.boardChar[i][j].type == "wall"):
                     print(self.boardFloor[i][j].symbol, end=" ")
+                    
+                elif(self.boardChar[i][j].type == "null" and 
+                        self.boardItem[i][j].type != "null"):
+                    print(self.boardItem[i][j].symbol, end=" ")
+                
                 else:
                     print(self.boardChar[i][j].symbol, end=" ")
+                    
             print("")
 
 
@@ -81,24 +99,24 @@ class PlayerNavigator:
         self.map = map
 
     def playerMovment(self, direction):
-        if(direction == 2):
+        if(direction == 8):  # Up
             self.map.boardChar[self.PosX][self.PosY] = Tile("null", 0, "#")
             self.PosY += 1
             self.map.boardChar[self.PosX][self.PosY] = self
 
-        if(direction == 4):
+        if(direction == 4):  # Left
+            self.map.boardChar[self.PosX][self.PosY] = Tile("null", 0, "#")
+            self.PosX -= 1
+            self.map.boardChar[self.PosX][self.PosY] = self
+
+        if(direction == 6):  # Right
             self.map.boardChar[self.PosX][self.PosY] = Tile("null", 0, "#")
             self.PosX += 1
             self.map.boardChar[self.PosX][self.PosY] = self
 
-        if(direction == 6):
+        if(direction == 2):  # Down
             self.map.boardChar[self.PosX][self.PosY] = Tile("null", 0, "#")
-            self.PosX += 1
-            self.map.boardChar[self.PosX][self.PosY] = self
-
-        if(direction == 8):
-            self.map.boardChar[self.PosX][self.PosY] = Tile("null", 0, "#")
-            self.PosY += 1
+            self.PosY -= 1
             self.map.boardChar[self.PosX][self.PosY] = self
         self.map.ShowMap()
 
@@ -118,7 +136,7 @@ def main():  # more for testing than anything
     James = Ch.Character("James", "Human", "@", 10, 1, 0)
     nav = PlayerNavigator(James, testMap3)
     testMap3.ShowMap()
-    nav.playerMovment(2)
+    nav.playerMovment(8)
     nav.playerMovment(6)
 
 
