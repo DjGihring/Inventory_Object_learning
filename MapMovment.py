@@ -7,6 +7,7 @@ player.
 """
 
 import Character as Ch
+import Inventory as Inv
 
 border = 2  # This allows for the walls to be placed around the room's floor
 
@@ -99,26 +100,48 @@ class PlayerNavigator:
         self.map = map
 
     def playerMovment(self, direction):
-        if(direction == 8):  # Up
-            self.map.boardChar[self.PosX][self.PosY] = Tile("null", 0, "#")
+        empty = Tile("null", 0, "#")
+    
+        if(direction == 8):  # up
+            self.map.boardChar[self.PosX][self.PosY] = empty
             self.PosY += 1
             self.map.boardChar[self.PosX][self.PosY] = self
 
         if(direction == 4):  # Left
-            self.map.boardChar[self.PosX][self.PosY] = Tile("null", 0, "#")
+            self.map.boardChar[self.PosX][self.PosY] = empty
             self.PosX -= 1
             self.map.boardChar[self.PosX][self.PosY] = self
 
         if(direction == 6):  # Right
-            self.map.boardChar[self.PosX][self.PosY] = Tile("null", 0, "#")
+            self.map.boardChar[self.PosX][self.PosY] = empty
             self.PosX += 1
             self.map.boardChar[self.PosX][self.PosY] = self
 
         if(direction == 2):  # Down
-            self.map.boardChar[self.PosX][self.PosY] = Tile("null", 0, "#")
+            self.map.boardChar[self.PosX][self.PosY] = empty
             self.PosY -= 1
             self.map.boardChar[self.PosX][self.PosY] = self
         self.map.ShowMap()
+        
+    def search(self, direction):
+        empty = Tile("null", 0, "#")
+    
+        if(direction == 8):  # Up
+            if(self.map.boardItem[self.PosX][self.PosY + 1] == empty):
+                return("Nothing is on the floor")
+            
+
+        if(direction == 4):  # Left
+            if(self.map.boardItem[self.PosX - 1][self.PosY] == empty):
+                return("Nothing is on the floor")
+
+        if(direction == 6):  # Right
+            if(self.map.boardItem[self.PosX + 1][self.PosY] == empty):
+                return("Nothing is on the floor")
+
+        if(direction == 2):  # Down
+            if(self.map.boardItem[self.PosX][self.PosY - 1] == empty):
+                return("Nothing is on the floor")
 
 
 def main():  # more for testing than anything

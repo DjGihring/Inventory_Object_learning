@@ -1,4 +1,8 @@
 Name:Orc
+Race:Orcy Boy
+Symbol:O
 Health:20
+Level:3
+Exp:0
 Attack:3
-Armour:2
+Armour:2 
